@@ -10,10 +10,6 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
 
 import java.io.IOException;
 import java.text.DateFormat;
@@ -81,11 +77,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         private Bitmap downloadImage(String code){
-            final DefaultHttpClient client = new DefaultHttpClient();
 
-            final HttpGet getReqest = new HttpGet(Utils.ICON_URL+code+".png");
-
-            HttpResponse response;
             return null;
         }
     }
