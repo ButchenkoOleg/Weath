@@ -1,5 +1,6 @@
 package com.example.oleg.weath;
 
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,10 +10,17 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+
 import java.io.IOException;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.util.Date;
 
+import Utils.Utils;
 import data.JSONWeatherParser;
 import data.WeatherHttpClient;
 import model.Weather;
@@ -38,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         cityName = (TextView)findViewById(R.id.cityText);
         iconView = (ImageView)findViewById(R.id.thumbnailIcon);
         temp = (TextView)findViewById(R.id.tempText);
@@ -60,6 +69,27 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private class DownloadImageAsyncTask extends AsyncTask <String, Void, Bitmap>{
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            super.onPostExecute(bitmap);
+        }
+
+        @Override
+        protected Bitmap doInBackground(String... params) {
+            return null;
+        }
+
+        private Bitmap downloadImage(String code){
+            final DefaultHttpClient client = new DefaultHttpClient();
+
+            final HttpGet getReqest = new HttpGet(Utils.ICON_URL+code+".png");
+
+            HttpResponse response;
+            return null;
+        }
+    }
+
     private  class  WeatherTask extends AsyncTask<String, Void, Weather>{
 
         @Override
@@ -68,7 +98,8 @@ public class MainActivity extends AppCompatActivity {
             String data = null;
             try {
                  data = ((new WeatherHttpClient()).getWeatherData(params[0]));
-                //System.out.println(data);
+
+
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -89,6 +120,9 @@ public class MainActivity extends AppCompatActivity {
             String sunrise = df.format(new Date(weather.place.getSanrice()));
             String sunset = df.format(new Date(weather.place.getSanset()));
             String lastUpdate = df.format(new Date(weather.place.getLastupdate()));
+            DecimalFormat decimalFormat = new DecimalFormat("#.#");
+
+            String tempFormat = decimalFormat.format(weather.currentCondition.getTemperature());
 
             cityName.setText(weather.place.getCity()+", "+weather.place.getCountry());
             temp.setText("" + weather.currentCondition.getTemperature()+"'C");
